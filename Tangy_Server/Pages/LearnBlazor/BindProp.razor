@@ -8,16 +8,38 @@ This product is : @(Product.IsActive ? "Active" : "IsActive") <br />
 
 Active :
 <input type="checkbox" @bind-value="Product.IsActive" checked="@Product.IsActive" /> <br />
+Property Selected : @selectedProp
+<br />
+@if (!String.IsNullOrWhiteSpace(selectedProp))
+{
+    <p>Property Value : @Product.ProductProperties.FirstOrDefault(u => u.Key == selectedProp).Value </p>
+}
+<br />
 
 Price:
 <input type="number" @bind-value="@Product.Price" @bind-value:event="oninput" />
+Product Properties :
+<InputSelect @bind-Value="selectedProp">
+    @foreach (var prop in Product.ProductProperties)
+    {
+        <option value="@prop.Key">@prop.Value</option>
+    }
+</InputSelect>
 
 @code {
+    private string selectedProp = "";
+
     Demo_Product Product = new()
         {
             Id = 1,
             Name = "Rose Candle",
             Price = 10.99,
-            IsActive = true
+            IsActive = true,
+            ProductProperties = new List<Demo_ProductProp>()
+            {
+                new Demo_ProductProp { Id = 1, Key = "Color", Value="Black"},
+                new Demo_ProductProp { Id = 2, Key = "Flavor", Value = "Rose Jasmine" },
+                new Demo_ProductProp { Id = 3, Key = "Size", Value = "20oz"},
+            }
         };
 }
