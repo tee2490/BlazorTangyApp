@@ -3,12 +3,17 @@
 <h3>BindProp</h3>
 Name: @Product.Name <br />
 Active: @Product.IsActive <br />
+Price: @Product.Price <br />
+
+Price:
+<input type="number" @bind-value="@Product.Price" @bind-value:event="oninput" />
 
 @code {
     Demo_Product Product = new()
         {
             Id = 1,
             Name = "Rose Candle",
+            Price = 10.99,
             IsActive = true
         };
 }
