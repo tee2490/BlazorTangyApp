@@ -1,30 +1,35 @@
 ﻿@page "/learnblazor/bindprop"
 
-<h3>BindProp</h3>
-Name: @Product.Name <br />
-Active: @Product.IsActive <br />
-Price: @Product.Price <br />
-This product is : @(Product.IsActive ? "Active" : "IsActive") <br />
-
-Active :
-<input type="checkbox" @bind-value="Product.IsActive" checked="@Product.IsActive" /> <br />
-Property Selected : @selectedProp
-<br />
-@if (!String.IsNullOrWhiteSpace(selectedProp))
-{
-    <p>Property Value : @Product.ProductProperties.FirstOrDefault(u => u.Key == selectedProp).Value </p>
-}
-<br />
-
-Price:
-<input type="number" @bind-value="@Product.Price" @bind-value:event="oninput" />
-Product Properties :
-<InputSelect @bind-Value="selectedProp">
-    @foreach (var prop in Product.ProductProperties)
-    {
-        <option value="@prop.Key">@prop.Value</option>
-    }
-</InputSelect>
+<h2 class="text-success">Individual Product</h2>
+<hr />
+<div class="row">
+    <div class="col-6 border rounded p-3">
+        <h3 class="text-primary">Product Playground</h3><hr />
+        <div>Active : <input type="checkbox" @bind-value="Product.IsActive" checked="@Product.IsActive" /></div>
+        <div>Price: <input type="number" @bind-value="@Product.Price" @bind-value:event="oninput" /> </div>
+        <div>
+            Product Properties :
+            <InputSelect @bind-Value="selectedProp">
+                @foreach (var prop in Product.ProductProperties)
+                {
+                    <option value="@prop.Key">@prop.Value</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+    <div class="col-6 border rounded p-3">
+        <h3 class="text-primary">Product Summary</h3><hr />
+        Name: @Product.Name <br />
+        Active : @Product.IsActive <br />
+        Price: @Product.Price<br />
+        This product is : @(Product.IsActive ? "Active" : "IsActive") <br />
+        Property Selected : @selectedProp <br />
+        @if (!String.IsNullOrWhiteSpace(selectedProp))
+        {
+            <p>Property Value : @Product.ProductProperties.FirstOrDefault(u => u.Key == selectedProp).Value </p>
+        }
+    </div>
+</div>
 
 @code {
     private string selectedProp = "";
