@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-between">
         @foreach(var prod in Products)
         {
-            <_IndividualProduct Product="prod"></_IndividualProduct>
+            <_IndividualProduct Product="prod" OnFavoriteUpdated="FavouriteCountUpdate"></_IndividualProduct>
         }
     </div>
 </div>
