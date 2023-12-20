@@ -3,11 +3,13 @@
 <h3>DemoProduct</h3>
 
 <p>Favorites Total : @SelectedFavouriteCount</p>
+<p>Last Selected Product : @LastSelectedProductName</p>
 <div class="border p-2 mt-2" style="background-color:azure">
     <div class="d-flex justify-content-between">
         @foreach(var prod in Products)
         {
-            <_IndividualProduct Product="prod" OnFavoriteUpdated="FavouriteCountUpdate"></_IndividualProduct>
+            <_IndividualProduct Product="prod" OnFavoriteUpdated="FavouriteCountUpdate"
+                                OnLastSelectedProductChange="LastFavoriteUpdate"></_IndividualProduct>
         }
     </div>
 </div>
@@ -15,6 +17,7 @@
 @code {
     List<Demo_Product> Products = new();
     private int SelectedFavouriteCount { get; set; } = 0;
+    private string LastSelectedProductName { get; set; }
 
     protected override void OnInitialized()
     {
@@ -59,5 +62,11 @@
             SelectedFavouriteCount--;
         }
     }
+
+    protected void LastFavoriteUpdate(string productName)
+    {
+        LastSelectedProductName = productName;
+    }
+
 
 }
