@@ -12,6 +12,17 @@
     <button class="btn btn-danger m-1" @onclick="ToastrFailure">Toastr Failure</button>
 </div>
 
+<div class="row">
+    <button class="btn btn-success m-1" 
+            @onclick="SweetAlertSuccess">
+        SweetAlert Success
+    </button>
+    <button class="btn btn-danger m-1" 
+            @onclick="SweetAlertFailure">
+        SweetAlert Failure
+    </button>
+</div>
+
 <div class="row text-center mt-4">
     @if (ConfirmResult)
     {
@@ -30,17 +41,27 @@
 
     private async Task TestConfirmBox()
     {
-        ConfirmResult = await _JsRuntime.InvokeAsync<bool>("confirm", ConfirmMessage);
+        ConfirmResult = await _JsRuntime.ConfirmBox(ConfirmMessage);
     }
 
     private async Task ToastrSuccess()
     {
-        await _JsRuntime.InvokeVoidAsync("ShowToastr", "success", "Success Ja");
+        await _JsRuntime.ToastrSuccess("Success Ja");
     }
 
     private async Task ToastrFailure()
     {
-        await _JsRuntime.InvokeVoidAsync("ShowToastr", "error", "Error Ja");
+        await _JsRuntime.ToastrError("Error Ja");
+    }
+
+    private async Task SweetAlertSuccess()
+    {
+        await _JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+    }
+
+    private async Task SweetAlertFailure()
+    {
+        await _JsRuntime.InvokeVoidAsync("ShowSwal", "error", "Task failed!");
     }
 
 }
