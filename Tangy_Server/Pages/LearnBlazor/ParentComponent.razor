@@ -2,11 +2,10 @@
 
 <h3>Parent Child Relation</h3>
 
-
-<_ChildComponent Title="This title is passed as parameter from Parent Component" OnButtonClick="ShowMessage">
-    <ChildContent> Render Fragment From Parent! WooHOO! </ChildContent>
-    <DangerChildContent>Danger Fragment From Parent! WooHOO!</DangerChildContent>
-</_ChildComponent>
+<CascadingValue Value="@MessageForGrandChild">
+    <_ChildComponent OnButtonClick="ShowMessage" Title="This title is passed as parameter from Parent Component">
+    </_ChildComponent>
+</CascadingValue>
 
 <p><b>messageText : @messageText</b></p>
 
@@ -22,6 +21,8 @@
         { "placeholder", "Enter Name From Parent"},
         { "maxlength", 5}
       };
+
+    public string MessageForGrandChild = "Cascading : This message is from your grand parent (ParentComponent)";
 
     private void ShowMessage()
     {
