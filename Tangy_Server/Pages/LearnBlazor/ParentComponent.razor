@@ -4,13 +4,11 @@
 
 
 <_ChildComponent Title="This title is passed as parameter from Parent Component" OnButtonClick="ShowMessage">
-    Render Fragment From Parent! WooHOO!
+    <ChildContent> Render Fragment From Parent! WooHOO! </ChildContent>
+    <DangerChildContent>Danger Fragment From Parent! WooHOO!</DangerChildContent>
 </_ChildComponent>
 
 <p><b>messageText : @messageText</b></p>
-
-<_ChildComponent Title="This is second child component">
-</_ChildComponent>
 
 @code {
     public string messageText = "";
