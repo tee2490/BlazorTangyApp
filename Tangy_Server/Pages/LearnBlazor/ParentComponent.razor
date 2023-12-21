@@ -5,7 +5,7 @@
 <CascadingValue Value="@MessageForGrandChild" Name="message">
     <CascadingValue Value="@LuckyNumber" Name="luckyNumber">
 
-        <_ChildComponent OnButtonClick="ShowMessage"
+        <_ChildComponent @ref="childComp" OnButtonClick="ShowMessage"
                          Title="This title is passed as parameter from Parent Component">
         </_ChildComponent>
 
@@ -16,6 +16,10 @@
 
 <_AnotherChildComponent InputAttributes="InputAttributesFromParent">
 </_AnotherChildComponent>
+
+<div class="row mt-2">
+    <button class="btn btn-success" @onclick="()=>childComp.SweetAlertSuccess()">Show SweetAlert by Ref Component</button>
+</div>
 
 @code {
     public string messageText = "";
@@ -30,6 +34,8 @@
     public string MessageForGrandChild = "Cascading : This message is from your grand parent (ParentComponent)";
 
     public string LuckyNumber = "7";
+
+    private _ChildComponent childComp;
 
     private void ShowMessage()
     {
