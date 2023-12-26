@@ -18,6 +18,7 @@
 }
 
 @code {
+    int round = 0;
     private int currentCount = 0;
     List<string> EventType = new List<string>();
 
@@ -46,5 +47,23 @@
     {
         EventType.Add("OnParametersSetAsync is called");
         await Task.Delay(1000);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            currentCount = 111;
+        }
+        else
+        {
+            currentCount = 999;
+        }
+        EventType.Add($"OnAfterRender is called {currentCount}....[{firstRender}] {++round}");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        EventType.Add($"OnAfterRenderAsync is called {currentCount}....[{firstRender}]");
     }
 }
