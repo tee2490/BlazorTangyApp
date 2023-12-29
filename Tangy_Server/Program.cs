@@ -1,3 +1,5 @@
+using Tangy_Business.Repository;
+using Tangy_Business.Repository.IRepository;
 using Tangy_DataAccess.Data;
 using Tangy_Server.Data;
 
@@ -9,6 +11,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 
