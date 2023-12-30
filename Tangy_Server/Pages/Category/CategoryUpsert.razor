@@ -57,23 +57,23 @@
 
     }
 
-    private void LoadCategory()
+    private async Task LoadCategory()
     {
-        Category = _categoryRepository.Get(Id);
+        Category = await _categoryRepository.Get(Id);
         IsLoading = false;
     }
 
-    private void UpsertCategory()
+    private async Task UpsertCategory()
     {
         if (Category.Id == 0)
         {
             //create
-            _categoryRepository.Create(Category);
+           await _categoryRepository.Create(Category);
         }
         else
         {
             //update
-            _categoryRepository.Update(Category);
+           await _categoryRepository.Update(Category);
         }
         _navigationManager.NavigateTo("category");
     }

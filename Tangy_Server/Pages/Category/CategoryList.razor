@@ -68,23 +68,23 @@
         if (firstRender)
         {
             await Task.Delay(1000);
-            LoadCategories();
+            await LoadCategories();
         }
     }
 
-    private void LoadCategories()
+    private async Task LoadCategories()
     {
         IsLoading = true;
         StateHasChanged();
-        Categories = _categoryRepository.GetAll();
+        Categories = await _categoryRepository.GetAll();
         IsLoading = false;
         StateHasChanged();
     }
 
-    private void HandleDelete(int id)
+    private async Task HandleDelete(int id)
     {
         DeleteCategoryId = id;
-        _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
+        await _jsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
     }
 
     //ส่งทั้งเมธอดไปให้ฝั่งรับ
@@ -95,8 +95,8 @@
         {
             //delete
             await Task.Delay(2000);
-            _categoryRepository.Delete(DeleteCategoryId);
-            LoadCategories();
+            await _categoryRepository.Delete(DeleteCategoryId);
+            await LoadCategories();
             await _jsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
         }
         IsLoading = false;
