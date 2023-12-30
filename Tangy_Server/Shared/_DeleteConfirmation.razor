@@ -11,16 +11,30 @@
             <div class="modal-body">
                 Are you sure you want to delete
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" 
-                @onclick="()=>OnConfirmationDelete(false)">
-                    Cancel
-                </button>
-                <button type="button" class="btn btn-danger" 
-                @onclick="()=>OnConfirmationDelete(true)">
-                    Delete
-                </button>
-            </div>
+            @if (IsParentComponentProcessing)
+            {
+                <div class="modal-footer">
+                    <button type="button" disabled class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" disabled class="btn btn-danger">
+                        Processing...
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @onclick="()=>OnConfirmationDelete(false)">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger"
+                            @onclick="()=>OnConfirmationDelete(true)">
+                        Delete
+                    </button>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -28,6 +42,9 @@
 @code {
     [Parameter]
     public EventCallback<bool> ConfirmationChanged { get; set; }
+
+    [Parameter]
+    public bool IsParentComponentProcessing { get; set; }
 
     private async Task OnConfirmationDelete(bool value)
     {
