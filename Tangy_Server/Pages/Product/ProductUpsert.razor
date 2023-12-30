@@ -35,18 +35,31 @@
                 </div>
 
                 <div class="row pt-3">
-                    <div class="btn-group col-6">
+                    <div class="form-group col-6">
                         <div class="form-check">
                             <InputCheckbox @bind-Value="Product.ShopFavorites" class="form-check-input"></InputCheckbox>
                             <label class="form-check-label">Is Shop Favorites</label>
                         </div>
                     </div>
-                    <div class="btn-group col-6">
+                    <div class="form-group col-6">
                         <div class="form-check">
                             <InputCheckbox @bind-Value="Product.CustomerFavorites" class="form-check-input"></InputCheckbox>
                             <label class="form-check-label">Is Customer Favorites</label>
                         </div>
                     </div>
+                    <div class="form-group col-6 mt-2">
+                        <label>Category</label>
+                        <InputSelect @bind-Value="Product.CategoryId" class="form-select">
+                            <option value="0" disabled="disabled" selected>--Select Category--</option>
+                            @foreach (var cat in Categories)
+                            {
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+
+                        </InputSelect>
+                        <ValidationMessage For="()=>Product.CategoryId"></ValidationMessage>
+                    </div>
+
                 </div>
 
                 <div class="form-group py-2">
