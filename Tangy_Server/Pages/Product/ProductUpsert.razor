@@ -89,6 +89,7 @@
     private IEnumerable<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
     private string Title { get; set; } = "Create";
     public bool IsLoading { get; set; }
+    public string OldImageUrl { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -110,6 +111,7 @@
             //update
             Title = "Update";
             Product = await _productRepository.Get(Id);
+            OldImageUrl = Product.ImageUrl;
         }
 
         IsLoading = false;
@@ -122,11 +124,18 @@
         {
             //create
             await _productRepository.Create(Product);
+            await _jsRuntime.ToastrSuccess("Product created successfully.");
         }
         else
         {
             //update
+            if (OldImageUrl != Product.ImageUrl)
+            {
+                _fileUpload.DeleteFile(OldImageUrl);
+
+            }
             await _productRepository.Update(Product);
+            await _jsRuntime.ToastrSuccess("Product updated successfully.");
         }
         _navigationManager.NavigateTo("product");
     }
