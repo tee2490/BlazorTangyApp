@@ -27,7 +27,8 @@
     [Parameter]
     public EventCallback<string> OnLastSelectedProductChange { get; set; }
 
-    private async Task FavoriteUpdated(ChangeEventArgs e)
+    //เพิ่ม Microsoft.AspNetCore.Components เนื่องจากไปชนกับ Blazor
+    private async Task FavoriteUpdated(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         await OnFavoriteUpdated.InvokeAsync((bool)e.Value);
     }
