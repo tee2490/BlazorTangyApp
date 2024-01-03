@@ -2,7 +2,7 @@
 @inject IProductRepository _productRepository
 @inject IProductPriceRepository _productPriceRepository
 
-<h3 class="card-title text-primary mb-3 ml-3">Product Price Managment</h3>
+<h3 class="card-title text-primary mb-3 ml-3">Product Price Management</h3>
 @if (IsLoading)
 {
     <div class="text-center">
@@ -23,6 +23,14 @@ else
             <img src="@Product.ImageUrl" class="w-100">
         </div>
     </div>
+
+    <SfGrid DataSource="@ProductPrices" AllowPaging="true">
+        <GridColumns>
+            <GridColumn Field=@nameof(ProductPriceDTO.Id) HeaderText="ID" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(ProductPriceDTO.Size) HeaderText="Size" Width="150"></GridColumn>
+            <GridColumn Field=@nameof(ProductPriceDTO.Price) HeaderText="Price" Format="C2" TextAlign="TextAlign.Right" Width="130"></GridColumn>
+        </GridColumns>
+    </SfGrid>
 }
 
 @code {
