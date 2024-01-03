@@ -24,14 +24,21 @@ else
         </div>
     </div>
 
-    <SfGrid DataSource="@ProductPrices" AllowPaging="true" 
-        Toolbar="@(new List<string>{"Add","Edit","Update","Delete","Cancel"})">
+    <SfGrid DataSource="@ProductPrices" AllowPaging="true"
+            Toolbar="@(new List<string>{"Add","Edit","Update","Delete","Cancel"})">
         <GridEvents OnActionBegin="ActionHandler" TValue="ProductPriceDTO"></GridEvents>
         <GridEditSettings AllowAdding="true" AllowEditing="true" ShowDeleteConfirmDialog="true" AllowDeleting="true">
         </GridEditSettings>
         <GridColumns>
             <GridColumn Field=@nameof(ProductPriceDTO.Id) HeaderText="ID" TextAlign="TextAlign.Right" Width="120"></GridColumn>
-            <GridColumn Field=@nameof(ProductPriceDTO.Size) HeaderText="Size" Width="150"></GridColumn>
+            <GridColumn Field=@nameof(ProductPriceDTO.Size) HeaderText="Size" Width="150">
+                <EditTemplate>
+                    <Syncfusion.Blazor.DropDowns.SfDropDownList DataSource="SizeList" TItem="string" TValue="string"
+                                                                @bind-Value="((context as ProductPriceDTO).Size)">
+
+                    </Syncfusion.Blazor.DropDowns.SfDropDownList>
+                </EditTemplate>
+            </GridColumn>
             <GridColumn Field=@nameof(ProductPriceDTO.Price) HeaderText="Price" Format="C2" TextAlign="TextAlign.Right" Width="130"></GridColumn>
         </GridColumns>
     </SfGrid>
@@ -44,6 +51,11 @@ else
     private ProductDTO Product { get; set; } = new();
     private IEnumerable<ProductPriceDTO> ProductPrices { get; set; } = new List<ProductPriceDTO>();
     private bool IsLoading { get; set; } = true;
+
+    IEnumerable<String> SizeList = new List<String>()
+    {
+        "Small","Medium","Large","8oz","16oz","24oz"
+    };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
