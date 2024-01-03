@@ -21,6 +21,7 @@ builder.Services.AddSyncfusionBlazor();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IFileUpload, FileUpload>();
+builder.Services.AddScoped<IProductPriceRepository, ProductPriceRepository>();
 
 var app = builder.Build();
 
