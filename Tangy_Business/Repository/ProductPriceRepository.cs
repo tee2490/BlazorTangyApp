@@ -49,9 +49,19 @@ namespace Tangy_Business.Repository
             return new ProductPriceDTO();
         }
 
-        public async Task<IEnumerable<ProductPriceDTO>> GetAll()
+        public async Task<IEnumerable<ProductPriceDTO>> GetAll(int? id = null)
         {
-            return _mapper.Map<IEnumerable<ProductPrice>, IEnumerable<ProductPriceDTO>>(_db.ProductPrices);
+            if (id != null && id > 0)
+            {
+                //รายการราคาสินค้า เฉพาะรหัสสินค้าที่ระบุ
+                return _mapper.Map<IEnumerable<ProductPrice>, IEnumerable<ProductPriceDTO>>
+                    (_db.ProductPrices.Where(u => u.ProductId == id));
+            }
+            else
+            {
+                //รายการราคาสินค้าทั้งหมด
+                return _mapper.Map<IEnumerable<ProductPrice>, IEnumerable<ProductPriceDTO>>(_db.ProductPrices);
+            }
         }
 
         public async Task<ProductPriceDTO> Update(ProductPriceDTO objDTO)
