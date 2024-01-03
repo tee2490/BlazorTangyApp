@@ -24,7 +24,11 @@ else
         </div>
     </div>
 
-    <SfGrid DataSource="@ProductPrices" AllowPaging="true">
+    <SfGrid DataSource="@ProductPrices" AllowPaging="true" 
+        Toolbar="@(new List<string>{"Add","Edit","Update","Delete","Cancel"})">
+        <GridEvents OnActionBegin="ActionHandler" TValue="ProductPriceDTO"></GridEvents>
+        <GridEditSettings AllowAdding="true" AllowEditing="true" ShowDeleteConfirmDialog="true" AllowDeleting="true">
+        </GridEditSettings>
         <GridColumns>
             <GridColumn Field=@nameof(ProductPriceDTO.Id) HeaderText="ID" TextAlign="TextAlign.Right" Width="120"></GridColumn>
             <GridColumn Field=@nameof(ProductPriceDTO.Size) HeaderText="Size" Width="150"></GridColumn>
@@ -53,4 +57,11 @@ else
             StateHasChanged();
         }
     }
+
+    //เตรียมไว้สำหรับ CRUD
+    public async void ActionHandler(ActionEventArgs<ProductPriceDTO> args)
+    {
+
+    }
+
 }
