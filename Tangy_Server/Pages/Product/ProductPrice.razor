@@ -48,6 +48,14 @@ else
                 </EditTemplate>
             </GridColumn>
             <GridColumn Field=@nameof(ProductPriceDTO.Price) HeaderText="Price" Format="C2"></GridColumn>
+            <GridColumn HeaderText="Manage Records" Width="150">
+                <GridCommandColumns>
+                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-save", CssClass="e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Cancel" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-cancel-icon", CssClass="e-flat" })"></GridCommandColumn>
+                </GridCommandColumns>
+            </GridColumn>
         </GridColumns>
     </SfGrid>
 }
