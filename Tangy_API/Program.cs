@@ -1,4 +1,6 @@
-using Tangy_DataAccess.Data;
+global using Tangy_Business.Repository;
+global using Tangy_Business.Repository.IRepository;
+global using Tangy_DataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
