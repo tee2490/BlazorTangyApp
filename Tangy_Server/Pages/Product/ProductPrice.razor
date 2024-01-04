@@ -86,6 +86,16 @@ else
                 ProductPrices = await _productPriceRepository.GetAll(Id);
                 await productPriceGrid.Refresh();
             }
+            if (args.Action == "Edit")
+            {
+                await _productPriceRepository.Update(args.Data);
+            }
+        }
+
+        if (args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            await _productPriceRepository.Delete(args.Data.Id);
+            await productPriceGrid.Refresh();
         }
     }
 
