@@ -32,6 +32,11 @@ else
         </GridEditSettings>
         <GridPageSettings PageSize="5" PageCount="5" PageSizes="true"></GridPageSettings>
         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+        <GridSortSettings AllowUnsort="false">
+            <GridSortColumns>
+                <GridSortColumn Field="Price" Direction="SortDirection.Ascending"></GridSortColumn>
+            </GridSortColumns>
+        </GridSortSettings>
         <GridColumns>
             <GridColumn IsPrimaryKey="true" AllowAdding="false" Field=@nameof(ProductPriceDTO.Id) HeaderText="ID"></GridColumn>
             <GridColumn Field=@nameof(ProductPriceDTO.Size) HeaderText="Size">
