@@ -25,6 +25,7 @@ else
     </div>
 
     <SfGrid @ref="productPriceGrid" DataSource="@ProductPrices" AllowPaging="true"
+            AllowFiltering="true" AllowSorting="true"
             Toolbar="@(new List<string>{"Add","Edit","Update","Delete","Cancel"})">
         <GridEvents OnActionBegin="ActionHandler" TValue="ProductPriceDTO"></GridEvents>
         <GridEditSettings AllowAdding="true" AllowEditing="true" ShowDeleteConfirmDialog="true" AllowDeleting="true">
