@@ -9,6 +9,8 @@ namespace Tangy_Client.Service
     {
         private readonly ILocalStorageService _localStorage;
 
+        public event Action OnChange;
+
         public CartService(ILocalStorageService localStorageService)
         {
             _localStorage = localStorageService;
@@ -44,6 +46,7 @@ namespace Tangy_Client.Service
             }
 
             await _localStorage.SetItemAsync(SD.ShoppingCart, cart);
+            OnChange.Invoke();
         }
 
         public async Task DecrementCart(ShoppingCart shoppingCart)
@@ -55,9 +58,8 @@ namespace Tangy_Client.Service
             {
                 if (cart[i].ProductId == shoppingCart.ProductId && cart[i].ProductPriceId == shoppingCart.ProductPriceId)
                 {
-                    if (shoppingCart.Count == 0) cart[i].Count = 0; //กรณีกดปุ่ม Delete โดยตรง
 
-                    if (cart[i].Count == 1 || cart[i].Count == 0)
+                    if (cart[i].Count == 1 || shoppingCart.Count == 0)
                     {
                         cart.Remove(cart[i]); //ไม่สามารถใช้ foreach เพราะมีการลบที่ต้องระบุตำแหน่งที่ i
                     }
@@ -69,6 +71,7 @@ namespace Tangy_Client.Service
             }
 
             await _localStorage.SetItemAsync(SD.ShoppingCart, cart);
+            OnChange.Invoke();
         }
     }
 }
