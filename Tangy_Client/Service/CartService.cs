@@ -55,6 +55,8 @@ namespace Tangy_Client.Service
             {
                 if (cart[i].ProductId == shoppingCart.ProductId && cart[i].ProductPriceId == shoppingCart.ProductPriceId)
                 {
+                    if (shoppingCart.Count == 0) cart[i].Count = 0; //กรณีกดปุ่ม Delete โดยตรง
+
                     if (cart[i].Count == 1 || cart[i].Count == 0)
                     {
                         cart.Remove(cart[i]); //ไม่สามารถใช้ foreach เพราะมีการลบที่ต้องระบุตำแหน่งที่ i
