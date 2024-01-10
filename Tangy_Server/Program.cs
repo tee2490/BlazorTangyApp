@@ -5,6 +5,7 @@ using Tangy_Server.Data;
 using Tangy_Server.Service.IService;
 using Tangy_Server.Service;
 using Syncfusion.Blazor;
+using Microsoft.AspNetCore.Identity;
 
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzAwOTI3MEAzMjMzMmUzMDJlMzBtdDJ6Yk5SU2dnbHpNa3dxUE5qZnhWU3V5anlEOXpyVkZCRkROT1lsckFzPQ==");
 
@@ -15,6 +16,16 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddDbContext<ApplicationDbContext>();
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+}).AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSyncfusionBlazor();
 

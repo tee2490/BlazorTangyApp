@@ -11,7 +11,7 @@
 }
 else
 {
-    @if (!ShoppingCart.Any())
+    @if (ShoppingCart == null|| !ShoppingCart.Any())
     {
         <div>
             Please add items to shopping cart.
@@ -122,6 +122,7 @@ else
     {
         OrderTotal = 0;
         ShoppingCart = await _localStorage.GetItemAsync<List<ShoppingCart>>(SD.ShoppingCart);
+        if (ShoppingCart == null) return;
         foreach (var cart in ShoppingCart)
         {
             cart.Product = Products.FirstOrDefault(u => u.Id == cart.ProductId);
