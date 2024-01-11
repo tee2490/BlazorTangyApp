@@ -1,0 +1,96 @@
+﻿@page "/role"
+@inject IRoleService roleService
+
+<h3 class="card-title text-primary mb-3 ml-3">Role Management</h3>
+@if (IsLoading)
+{
+    <div class="text-center">
+        <img src="/images/loading.gif">
+    </div>
+}
+else
+{
+    <SfGrid @ref="roleGrid" DataSource="@Roles" AllowPaging="true"
+            AllowFiltering="true" AllowSorting="true"
+            Toolbar="@(new List<string>{"Add","Edit","Update","Delete","Cancel"})">
+
+        <GridEvents OnActionBegin="ActionHandler" TValue="RoleDTO"></GridEvents>
+
+        <GridEditSettings AllowAdding="true" AllowEditing="true" ShowDeleteConfirmDialog="true" AllowDeleting="true">
+        </GridEditSettings>
+
+        <GridPageSettings PageSize="5" PageCount="5" PageSizes="true"></GridPageSettings>
+
+        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+
+        <GridColumns>
+            <GridColumn IsPrimaryKey="true" AllowAdding="false" Field=@nameof(RoleDTO.Id) HeaderText="ID"></GridColumn>
+
+            <GridColumn Field=@nameof(RoleDTO.Name) HeaderText="Name"></GridColumn>
+
+            <GridColumn HeaderText="Manage Records" Width="150">
+                <GridCommandColumns>
+                    <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Save" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-save", CssClass="e-flat" })"></GridCommandColumn>
+                    <GridCommandColumn Type="CommandButtonType.Cancel" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-cancel-icon", CssClass="e-flat" })"></GridCommandColumn>
+                </GridCommandColumns>
+            </GridColumn>
+
+        </GridColumns>
+    </SfGrid>
+}
+
+@code {
+
+    private bool IsLoading { get; set; } = true;
+    private IEnumerable<RoleDTO> Roles { get; set; } = new List<RoleDTO>();
+
+    //เป็นข้อมูลประเภท IEnumerable ชนิดหนึ่งแบบ SfGrid
+    public SfGrid<RoleDTO> roleGrid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        StateHasChanged();
+
+        Roles = await roleService.GetAll();
+        await Task.Delay(1000);
+
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+    //เตรียมไว้สำหรับ CRUD
+    public async void ActionHandler(ActionEventArgs<RoleDTO> args)
+    {
+        //Save เมื่อกดปุ่ม Update หรือกด Enter
+        if (args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            if (args.Action == "Add")
+            {
+                await roleService.Add(args.Data);
+                Roles = await roleService.GetAll();
+                await roleGrid.Refresh();
+            }
+
+            if (args.Action == "Edit")
+            {
+                var result = await roleService.Update(args.Data);
+
+                if (!result) //ถ้าอัพเดทไม่สำเร็จ
+                {
+                    Roles = await roleService.GetAll();
+                    await roleGrid.Refresh();
+                }
+            }
+        }
+
+        if (args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            await roleService.Delete(args.Data);
+            await roleGrid.Refresh();
+        }
+
+    }
+}
