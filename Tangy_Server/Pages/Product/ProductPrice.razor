@@ -1,6 +1,7 @@
 ﻿@page "/product/price/{Id:int}"
 @inject IProductRepository _productRepository
 @inject IProductPriceRepository _productPriceRepository
+@attribute [Authorize]
 
 <h3 class="card-title text-primary mb-3 ml-3">Product Price Management</h3>
 @if (IsLoading)
