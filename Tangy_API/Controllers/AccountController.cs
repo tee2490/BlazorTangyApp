@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 using Tangy_API.Helper;
 using Tangy_Common;
 using Tangy_Models;
@@ -105,6 +108,33 @@ namespace Tangy_API.Controllers
             }
 
             return StatusCode(201);
+        }
+
+        private SigningCredentials GetSigningCredentials()
+        {
+            //อ่านรหัสลับแล้วนำมาเข้ารหัสอีกครั้งตามอัลกอริทึมที่เราเลือก
+            var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_apiSetting.Value.SecretKey));
+            return new SigningCredentials(secret, SecurityAlgorithms.Sha256);
+        }
+
+        private async Task<List<Claim>> GetClaims(ApplicationUser user)
+        {
+            //อ่านข้อมูลของผู้ใช้ เก็บไว้ในลิสต์
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name,user.Email),
+                new Claim(ClaimTypes.Email,user.Email),
+                new Claim("Id",user.Id)
+            };
+
+            //อ่าน role ของผู้ใช้ซึ่งมีได้หลาย role
+            var roles = await _userManager.GetRolesAsync(await _userManager.FindByEmailAsync(user.Email));
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            return claims;
         }
 
     }
