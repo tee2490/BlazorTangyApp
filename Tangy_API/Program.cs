@@ -4,6 +4,9 @@ global using Tangy_DataAccess.Data;
 global using Tangy_DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Tangy_API.Helper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +40,30 @@ builder.Services.AddCors(o => o.AddPolicy("Tangy", builder =>
 var apiSettingsSection = builder.Configuration.GetSection("APISettings");
 builder.Services.Configure<APISettings>(apiSettingsSection);
 
+var apiSettings = apiSettingsSection.Get<APISettings>();
+var key = Encoding.ASCII.GetBytes(apiSettings.SecretKey);
+
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidAudience = apiSettings.ValidAudience,
+        ValidIssuer = apiSettings.ValidIssuer,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,6 +77,7 @@ app.UseHttpsRedirection();
 app.UseCors("Tangy");
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
