@@ -3,6 +3,7 @@ global using Tangy_Business.Repository.IRepository;
 global using Tangy_DataAccess.Data;
 global using Tangy_DataAccess;
 using Microsoft.AspNetCore.Identity;
+using Tangy_API.Helper;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,10 @@ builder.Services.AddCors(o => o.AddPolicy("Tangy", builder =>
 {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 }));
+
+//อ่านค่าจาก json มาใส่คลาส APISettings
+var apiSettingsSection = builder.Configuration.GetSection("APISettings");
+builder.Services.Configure<APISettings>(apiSettingsSection);
 
 var app = builder.Build();
 
