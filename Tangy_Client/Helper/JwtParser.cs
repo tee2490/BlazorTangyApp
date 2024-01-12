@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
 
-namespace Tangy_API.Helper
+namespace Tangy_Client.Helper
 {
     public static class JwtParser
     {
