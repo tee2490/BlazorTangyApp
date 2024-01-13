@@ -2,6 +2,7 @@
 @inject IJSRuntime _jsRuntime
 @inject ILocalStorageService _localStorage
 @inject IProductService _productService
+@attribute [Authorize]
 
 @if (IsProcessing)
 {
