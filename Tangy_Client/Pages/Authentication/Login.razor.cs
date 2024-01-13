@@ -12,7 +12,7 @@ namespace Tangy_Client.Pages.Authentication
         public string Errors { get; set; }
 
         [Inject]
-        public IAuthenticationService _authSerivce { get; set; }
+        public IAuthenticationService _authService { get; set; }
         [Inject]
         public NavigationManager _navigationManager { get; set; }
 
@@ -21,7 +21,7 @@ namespace Tangy_Client.Pages.Authentication
             ShowSignInErrors = false;
             IsProcessing = true;
 
-            var result = await _authSerivce.Login(SignInRequest);
+            var result = await _authService.Login(SignInRequest);
 
             if (result.IsAuthSuccessful)
             {
