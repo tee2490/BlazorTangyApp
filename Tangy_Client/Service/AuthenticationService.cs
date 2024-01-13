@@ -39,6 +39,7 @@ namespace Tangy_Client.Service
                 await _localStorage.SetItemAsync(SD.Local_Token, result.Token);
                 await _localStorage.SetItemAsync(SD.Local_UserDetails, result.UserDTO);
 
+                ((AuthStateProvider)_authStateProvider).NotifyUserLoggedIn(result.Token);
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
 
                 return new SignInResponseDTO() { IsAuthSuccessful = true };
@@ -53,6 +54,8 @@ namespace Tangy_Client.Service
         {
             await _localStorage.RemoveItemAsync(SD.Local_Token);
             await _localStorage.RemoveItemAsync(SD.Local_UserDetails);
+
+            ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
             _client.DefaultRequestHeaders.Authorization = null;
         }
 

@@ -26,7 +26,7 @@ namespace Tangy_Client.Pages.Authentication
             if (result.IsAuthSuccessful)
             {
                 //login is successful
-                _navigationManager.NavigateTo("/",forceLoad: true);
+                _navigationManager.NavigateTo("/");
             }
             else
             {

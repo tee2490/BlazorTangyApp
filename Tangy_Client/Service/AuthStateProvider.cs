@@ -34,5 +34,21 @@ namespace Tangy_Client.Service
             //แปลงจาก Token ไปเป็นค่าที่อ่านเข้าใจ ประกอบไปด้วย key กับ value
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType")));
         }
+
+        //การแจ้งเตือนสถานะการเข้าระบบ
+        public void NotifyUserLoggedIn(string token)
+        {
+            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
+            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            NotifyAuthenticationStateChanged(authState);
+        }
+
+        //การแจ้งเตือนสถานะการออกระบบ
+        public void NotifyUserLogout()
+        {
+            var authState = Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
+            NotifyAuthenticationStateChanged(authState);
+        }
     }
+
 }
