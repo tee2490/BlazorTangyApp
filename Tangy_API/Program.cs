@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Stripe;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -90,6 +91,8 @@ builder.Services.AddAuthentication(opt =>
 });
 
 var app = builder.Build();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["ApiKey"];
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
