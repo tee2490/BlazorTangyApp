@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text;
 using Tangy_Client.Service.IService;
 using Tangy_Models;
 
@@ -47,6 +48,27 @@ namespace Tangy_Client.Service
             }
 
             return new List<OrderDTO>();
+        }
+
+        public async Task<OrderDTO> Create(StripePaymentDTO paymentDTO)
+        {
+            //แปลงให้อยู่ในรูปแบบ Json
+            var content = JsonConvert.SerializeObject(paymentDTO);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            //ส่งไปฝั่ง API และได้รับค่าที่ส่งกลับมา
+            var response = await _httpClient.PostAsync("api/order/create", bodyContent);
+
+            string responseResult = response.Content.ReadAsStringAsync().Result;
+
+            //ที่ใช้รูปแบบนี้เพื่อให้สามารถตรวจสอบ error OK() จาก Controller
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<OrderDTO>(responseResult);
+                return result;
+            }
+            return new OrderDTO();
+
         }
 
     }

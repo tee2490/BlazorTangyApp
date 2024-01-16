@@ -2,6 +2,7 @@
 @inject IJSRuntime _jsRuntime
 @inject ILocalStorageService _localStorage
 @inject IProductService _productService
+@inject IOrderService _orderService
 @attribute [Authorize]
 
 @if (IsProcessing)
@@ -168,6 +169,21 @@ else
 
     private async Task HandleCheckout()
     {
+        try
+        {
 
+            var paymentDto = new StripePaymentDTO()
+                {
+                    Order = Order
+                };
+
+            var orderHeaderSaved = await _orderService.Create(paymentDto);
+
+            await _jsRuntime.ToastrSuccess("บันทึกสำเร็จ");
+        }
+        catch (Exception e)
+        {
+            await _jsRuntime.ToastrError(e.Message);
+        }
     }
 }
