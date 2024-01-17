@@ -3,6 +3,7 @@
 @inject ILocalStorageService _localStorage
 @inject IProductService _productService
 @inject IOrderService _orderService
+@inject IPaymentService _paymentService
 @attribute [Authorize]
 
 @if (IsProcessing)
@@ -177,7 +178,13 @@ else
                     Order = Order
                 };
 
-            var orderHeaderSaved = await _orderService.Create(paymentDto);
+            var result = await _paymentService.Checkout(paymentDto); //ไปยัง stripe
+
+            Order.OrderHeader.SessionId = result.Data.ToString();
+
+            var orderDTOSaved = await _orderService.Create(paymentDto); //สร้าง order database
+
+            await _jsRuntime.InvokeVoidAsync("redirectToCheckout", result.Data.ToString());
 
             await _jsRuntime.ToastrSuccess("บันทึกสำเร็จ");
         }

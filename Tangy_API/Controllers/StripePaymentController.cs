@@ -25,7 +25,7 @@ namespace Tangy_API.Controllers
                 var domain = _configuration.GetValue<string>("Tangy_Client_URL");
 
                 //session stripe .net : https://stripe.com/docs/api/checkout/sessions/create?lang=dotnet
-                //Stripe-hosted page : https://stripe.com/docs/checkout/quickstart?lang=dotnet
+                //stripe-hosted page : https://stripe.com/docs/checkout/quickstart?lang=dotnet
 
                 //สร้างข้อมูลตามแบบฟอร์มของ stripe 
                 var options = new SessionCreateOptions
