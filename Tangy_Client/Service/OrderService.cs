@@ -68,7 +68,25 @@ namespace Tangy_Client.Service
                 return result;
             }
             return new OrderDTO();
+        }
 
+        //ดำเนินการเปลี่ยนสถานะจาก Pending เป็น Confirmed
+        public async Task<OrderHeaderDTO> MarkPaymentSuccessful(OrderHeaderDTO orderHeader)
+        {
+            var content = JsonConvert.SerializeObject(orderHeader);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            
+            //ส่งไปยัง Order Api เพื่อเปลี่ยนสถานะใน OrderHeaders database เป็น Confirmed
+            var response = await _httpClient.PostAsync("api/order/paymentsuccessful", bodyContent);
+
+            string responseResult = response.Content.ReadAsStringAsync().Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<OrderHeaderDTO>(responseResult);
+                return result;
+            }
+            var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(responseResult);
+            throw new Exception(errorModel.ErrorMessage);
         }
 
     }

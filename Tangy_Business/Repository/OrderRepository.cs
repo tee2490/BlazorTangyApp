@@ -107,12 +107,15 @@ namespace Tangy_Business.Repository
             {
                 return new OrderHeaderDTO();
             }
-            if (data.Status == SD.Status_Pending)
+
+            //เปลี่ยนสถานะจาก Pending เป็น Confirmed
+            if (data.Status == SD.Status_Pending) 
             {
                 data.Status = SD.Status_Confirmed;
                 await _db.SaveChangesAsync();
                 return _mapper.Map<OrderHeader, OrderHeaderDTO>(data);
             }
+
             return new OrderHeaderDTO();
         }
 
