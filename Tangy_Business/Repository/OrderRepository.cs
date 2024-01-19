@@ -160,5 +160,39 @@ namespace Tangy_Business.Repository
             await _db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<OrderHeaderDTO> CancelOrder(int id)
+        {
+            var orderHeader = await _db.OrderHeaders.FindAsync(id);
+
+            if (orderHeader == null)
+            {
+                return new OrderHeaderDTO();
+            }
+
+            if (orderHeader.Status == SD.Status_Pending)
+            {
+                orderHeader.Status = SD.Status_Cancelled;
+                await _db.SaveChangesAsync();
+            }
+
+            if (orderHeader.Status == SD.Status_Confirmed)
+            {
+                //Refund and cancel payments :  https://stripe.com/docs/refunds?dashboard-or-api=api
+                var options = new Stripe.RefundCreateOptions
+                {
+                    Reason = Stripe.RefundReasons.RequestedByCustomer,
+                    PaymentIntent = orderHeader.PaymentIntentId
+                };
+
+                var service = new Stripe.RefundService();
+                Stripe.Refund refund = service.Create(options);
+
+                orderHeader.Status = SD.Status_Refunded;
+                await _db.SaveChangesAsync();
+            }
+
+            return _mapper.Map<OrderHeader, OrderHeaderDTO>(orderHeader);
+        }
     }
 }
