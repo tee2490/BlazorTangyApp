@@ -1,6 +1,7 @@
 ﻿@page "/order/details/{Id:int}"
 @inject IOrderRepository _orderRepository
 @inject IJSRuntime _jsRuntime
+@attribute [Authorize]
 
 @if (IsLoading)
 {
