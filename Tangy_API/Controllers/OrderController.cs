@@ -64,8 +64,8 @@ namespace Tangy_API.Controllers
 
             if (sessionDetails.PaymentStatus == "paid")
             {
-                //ไปเปลี่ยนสถานะจาก Pending เป็น Confirmed ใน database
-                var result = await _orderRepository.MarkPaymentSuccessful(orderHeaderDTO.Id);
+                //ไปเปลี่ยนสถานะจาก Pending เป็น Confirmed และบันทึก PaymentIntentId(ID ติดตามการเบิกจ่าย) ใน database
+                var result = await _orderRepository.MarkPaymentSuccessful(orderHeaderDTO.Id, sessionDetails.PaymentIntentId);
 
                 if (result == null)
                 {

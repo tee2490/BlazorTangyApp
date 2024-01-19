@@ -55,6 +55,7 @@
         //ถ้ายืนยันเรียบร้อย ให้ลบตะกร้าและออเดอร์ที่ชำระเงินจาก stripe ใน storage
         if (updatedOrder.Status == SD.Status_Confirmed)
         {
+            Order.OrderHeader.Status = updatedOrder.Status; //ใช้สำหรับแสดงผลบนหน้าจอเท่านั้น
             await _localStorage.RemoveItemAsync(SD.ShoppingCart);
             await _localStorage.RemoveItemAsync(SD.Local_OrderDetails);
         }

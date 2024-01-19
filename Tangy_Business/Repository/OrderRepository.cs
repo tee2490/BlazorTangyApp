@@ -100,7 +100,7 @@ namespace Tangy_Business.Repository
             return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(OrderFromDb);
         }
 
-        public async Task<OrderHeaderDTO> MarkPaymentSuccessful(int id)
+        public async Task<OrderHeaderDTO> MarkPaymentSuccessful(int id, string paymentIntentId)
         {
             var data = await _db.OrderHeaders.FindAsync(id);
             if (data == null)
@@ -111,6 +111,7 @@ namespace Tangy_Business.Repository
             //เปลี่ยนสถานะจาก Pending เป็น Confirmed
             if (data.Status == SD.Status_Pending) 
             {
+                data.PaymentIntentId = paymentIntentId; //ID ติดตามการเบิกจ่ายเงิน
                 data.Status = SD.Status_Confirmed;
                 await _db.SaveChangesAsync();
                 return _mapper.Map<OrderHeader, OrderHeaderDTO>(data);
