@@ -91,7 +91,6 @@
     private string Title { get; set; } = "Create";
     public bool IsLoading { get; set; }
     public string OldImageUrl { get; set; }
-    public string Temp { get; set; }
     public IBrowserFile FileImage { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -123,6 +122,12 @@
 
     private async Task UpsertProduct()
     {
+        if (FileImage is not null)
+        {
+            //บันทึกรูปภาพ
+            Product.ImageUrl = await _fileUpload.UploadFile(FileImage);
+        }
+
         if (Product.Id == 0)
         {
             //create
@@ -145,7 +150,7 @@
 
     private async Task HandleImageUpload(InputFileChangeEventArgs e)
     {
-        IsLoading = true;
+        var imagefiletypes = new List<string>() { ".png", ".jpg", ".jpeg" };
 
         try
         {
@@ -153,22 +158,30 @@
             {
                 foreach (var file in e.GetMultipleFiles())
                 {
-                    System.IO.FileInfo fileInfo = new System.IO.FileInfo(file.Name);
-                    if (fileInfo.Extension.ToLower() == ".jpg" ||
-                      fileInfo.Extension.ToLower() == ".png" ||
-                      fileInfo.Extension.ToLower() == ".jpeg")
+                    //ดึงนามสกุลและแปลงเป็นตัวเล็ก
+                    var extensionname = Path.GetExtension(file.Name).ToLower();
+
+                    if (imagefiletypes.Contains(extensionname))
                     {
-                        Product.ImageUrl = await _fileUpload.UploadFile(file);
+                        FileImage = file; //เก็บไฟล์ไว้ก่อน นำไปใช้ตอนบันทึกจริง
+
+                        #region อ่านภาพแสดงบนจอ
+                        using Stream imageStream = file.OpenReadStream(1024 * 1024 * 10);
+                        using MemoryStream ms = new();
+                        await imageStream.CopyToAsync(ms);
+
+                        //convert stream to base64
+                        Product.ImageUrl = $"data:image/png;base64,{Convert.ToBase64String(ms.ToArray())}";
+                        #endregion
                     }
                     else
                     {
                         await _jsRuntime.ToastrError("Please select .jpg/.jpeg/.png file only");
-                        return;
+                        break;
                     }
                 }
             }
 
-            IsLoading = false;
         }
         catch (Exception ex)
         {
